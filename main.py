@@ -25,30 +25,38 @@ class Cellullar1D(CellularAutomata):
 
     def __init__(self, size, rules):
         super().__init__((size,1), rules)
-        self.line_idx = 0
         self.size = size
+        self.stored_states = []
 
     def start_middle(self):
         self.rooster[(self.shape[0])//2] = 1
 
 
     def draw(self, screen):
-        cellsize = 10
-        surf = pygame.Surface((cellsize,cellsize))
-        surf.fill((255,255,255))
-        for idx, cell in np.ndenumerate(self.rooster):
-            if cell > 0:
+        self.cellsize = self.SCREEN_WIDTH//self.size
+        #print(cellsize)
+        screen.fill((0,0,0))
+        surf = pygame.Surface((self.cellsize,self.cellsize))
+        if self.rainbowmode:
+            surf.fill((rnd.randint(0,255),rnd.randint(0,255),rnd.randint(0,255)))
+        else:
+            surf.fill((255,255,255))
+        for line_idx in range(len(self.stored_states)):
+            for idx, cell in np.ndenumerate(self.stored_states[line_idx]):
+                if cell > 0:
                 #print(idx[0],self.line_idx)
-                screen.blit(surf, (idx[0]*cellsize, self.line_idx*cellsize))
+                    screen.blit(surf, (idx[0]*self.cellsize, line_idx*self.cellsize))
         pygame.display.flip()
-        self.line_idx += 1
+        
 
-    def run(self):
+    def run(self, width, height, changetime, rainbowmode):
+        """start pygame visualisatie met bepaalde width en height, changetime geeft tijd tussen updates en rainbowmode is bool"""
         pygame.init()
-        SCREEN_WIDTH = 640
-        SCREEN_HEIGHT = 640
-        size = [SCREEN_WIDTH,SCREEN_HEIGHT]
-        changetime = 500 #ms
+        self.rainbowmode = rainbowmode
+        self.SCREEN_WIDTH = width
+        self.SCREEN_HEIGHT = height
+        size = [self.SCREEN_WIDTH,self.SCREEN_HEIGHT]
+        self.changetime = changetime #ms
         screen = pygame.display.set_mode(size)
         running = True
         last = pygame.time.get_ticks()
@@ -59,9 +67,15 @@ class Cellullar1D(CellularAutomata):
                     pygame.quit()
             now = pygame.time.get_ticks()
             if now - last > changetime:
+                self.stored_states.append(self.rooster)
                 self.draw(screen)
                 self.update()
+                if len(self.stored_states) > self.SCREEN_HEIGHT/self.cellsize:
+                    self.stored_states.pop(0)
+                    #changetime = 2000 #ms
                 last = pygame.time.get_ticks()
+                
+#class Cellular2D(CellularAutomata(shape, rules))
         
           
 def rule22(cell, idx, rooster):
@@ -73,19 +87,21 @@ def rule22(cell, idx, rooster):
     else: right = False
     center = cell > 0
 
-    if left and center:
+    if left and center and right:
         return 0
-    elif left and right:
+    elif left and center and not right:
         return 0
-    elif right and not center and not right:
+    elif left and not center and right:
+        return 0
+    elif left and not center and not right:
         return 1
-    elif center and right:
+    elif not left and right and center:
         return 0
     elif not left and center and not right:
         return 1
     elif not left and not center and right:
         return 1
-    else:
+    else: 
         return 0
 
     return cell
@@ -119,6 +135,6 @@ def rule54(cell, idx, rooster):
     return cell
     
 
-game = Cellullar1D(64, rule54)
+game = Cellullar1D(128, rule22)
 game.start_middle()
-game.run()
+game.run(1280,640, 100, True)
