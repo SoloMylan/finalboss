@@ -90,6 +90,35 @@ def rule22(cell, idx, rooster):
 
     return cell
 
-game = Cellullar1D(64, rule22)
+def rule54(cell, idx, rooster):
+    if idx[0] > 0:
+        left = rooster[idx[0]-1,idx[1]] > 0
+    else: left = False
+    if idx[0] < rooster.shape[0] - 1:
+        right = rooster[idx[0]+1,idx[1]] > 0
+    else: right = False
+    center = cell > 0
+    
+    if left and center and right:
+        return 0
+    elif left and center:
+        return 0
+    elif left and right:
+        return 1
+    elif left:
+        return 1
+    elif center and right:
+        return 0
+    elif center:
+        return 1
+    elif right:
+        return 1
+    else:
+        return 0
+    
+    return cell
+    
+
+game = Cellullar1D(64, rule54)
 game.start_middle()
 game.run()
