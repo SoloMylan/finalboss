@@ -38,7 +38,7 @@ class Cellullar1D(CellularAutomata):
         surf.fill((255,255,255))
         for idx, cell in np.ndenumerate(self.rooster):
             if cell > 0:
-                print(idx[0],self.line_idx)
+                #print(idx[0],self.line_idx)
                 screen.blit(surf, (idx[0]*cellsize, self.line_idx*cellsize))
         pygame.display.flip()
         self.line_idx += 1
@@ -48,12 +48,21 @@ class Cellullar1D(CellularAutomata):
         SCREEN_WIDTH = 640
         SCREEN_HEIGHT = 640
         size = [SCREEN_WIDTH,SCREEN_HEIGHT]
-        changetime = 1 #s
+        changetime = 500 #ms
         screen = pygame.display.set_mode(size)
-        while True:
-            self.draw(screen)
-            self.update()
-            time.sleep(changetime)
+        running = True
+        last = pygame.time.get_ticks()
+        while running:
+            for event in pygame.event.get():
+                if event.type == pygame.QUIT:
+                    running = False
+                    pygame.quit()
+            now = pygame.time.get_ticks()
+            if now - last > changetime:
+                self.draw(screen)
+                self.update()
+                last = pygame.time.get_ticks()
+        
           
 def rule22(cell, idx, rooster):
     if idx[0] > 0:
