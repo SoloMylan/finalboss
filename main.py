@@ -5,13 +5,13 @@ import time
 
 #Globale functies
 
-def get_neighbours1D(rooster: np.ndarray, idx: list, reach: int) -> list:
+def get_neighbours1D(grid: np.ndarray, idx: list, reach: int) -> list:
     """Geeft een lijst met de staten van horizontale buren met reach voor verschillende 'groottes' van buurten. Bedoeld voor 1D, maar kan ook voor meerdere dimensies gebruikt worden. Dan kijkt het alleen naar buren in 1 dimensie (de 1e)"""
     states = []
     for i in range(idx-reach, idx+reach+1):
         #check dat de index bestaat, anders 0 toevoegen
-        if i > 0 and i < rooster.size:
-            states.append(rooster[i])
+        if i > 0 and i < grid.size:
+            states.append(grid[i])
         else:
             states.append(0)
     return states
@@ -19,22 +19,22 @@ def get_neighbours1D(rooster: np.ndarray, idx: list, reach: int) -> list:
 class CellularAutomata():
     
     def __init__(self, shape, rules):
-        """Maakt een cellulaire automata aan met de shape voor de vorm van het rooster, en een functie rules met als input een cell, een index en het rooster en als output de geupdate staat van de cell"""
-        self.rooster = np.zeros(shape) #rooster begint met allemaal nullen
+        """Maakt een cellulaire automata aan met de shape voor de vorm van het grid, en een functie rules met als input een cell, een index en het grid en als output de geupdate staat van de cell"""
+        self.grid = np.zeros(shape) #grid begint met allemaal nullen
         self.shape = shape
         self.rules = rules
 
     def update(self):
-        """update het hele rooster door voor elke cel de rules functie op te roepen om te bepalen wat zijn nieuwe staat moet zijn"""
-        nieuw_rooster = np.copy(self.rooster)
-        for idx, cell in np.ndenumerate(self.rooster):
-            nieuw_rooster[idx] = self.rules(cell, idx, self.rooster)
-        self.rooster = nieuw_rooster
+        """update het hele grid door voor elke cel de rules functie op te roepen om te bepalen wat zijn nieuwe staat moet zijn"""
+        nieuw_grid = np.copy(self.grid)
+        for idx, cell in np.ndenumerate(self.grid):
+            nieuw_grid[idx] = self.rules(cell, idx, self.grid)
+        self.grid = nieuw_grid
     
     def random(self):
-        """vult rooster met random 0 of 1"""
-        for idx, cell in np.ndenumerate(self.rooster):
-            self.rooster[idx] = rnd.choice((0,1))
+        """vult grid met random 0 of 1"""
+        for idx, cell in np.ndenumerate(self.grid):
+            self.grid[idx] = rnd.choice((0,1))
 
 class Cellular1D(CellularAutomata):
 
@@ -44,46 +44,44 @@ class Cellular1D(CellularAutomata):
         self.stored_states = []
 
     def start_middle(self):
-        """"maakt het middelste element van het rooster gelijk aan 1"""
-        self.rooster[(self.shape[0])//2] = 1
+        """"maakt het middelste element van het grid gelijk aan 1"""
+        self.grid[(self.shape[0])//2] = 1
     
     
                 
 
 
-    def draw(self, screen: pygame.Surface):
-        """"tekent het rooster op een screen, scrollt automatisch mee als onderkant van scherm wordt bereikt"""
+    def draw(self, screen: pygame.Surface, cellsize: int, surf: pygame.Surface):
+        """"tekent het grid op een screen, scrollt automatisch mee als onderkant van scherm wordt bereikt"""
         
         #update de lijst van te tekenen rijen met de huidige staat
-        self.stored_states.append(self.rooster)
+        self.stored_states.append(self.grid)
         
         screen.fill((0,0,0))
         
-        self.cellsize = self.SCREEN_WIDTH//self.size
+
         
-        surf = pygame.Surface((self.cellsize,self.cellsize))
         #kies de kleur van surf
         if self.rainbowmode:
             surf.fill((rnd.randint(0,255),rnd.randint(0,255),rnd.randint(0,255)))
-        else:
-            surf.fill((255,255,255))
+        
 
         #ga alle cellen bij langs en kleur ze in als de staat > 0  
         for line_idx in range(len(self.stored_states)):
             for idx, cell in np.ndenumerate(self.stored_states[line_idx]):
-                if cell > 0:
-                    #tekent vierkant op de correcte lijn door de line_idx die de correcte line aangeeft. Deze kan niet groter worden dan self.SCREEN_HEIGHT/self.cellsize doordat ongebruikte rijen verwijdert worden
-                    screen.blit(surf, (idx[0]*self.cellsize, line_idx*self.cellsize))
+                if cell > 0 and idx[0]*cellsize - (self.size*cellsize/2 - self.SCREEN_WIDTH/2) >= 0 and idx[0]*cellsize - (self.size*cellsize/2 - self.SCREEN_WIDTH/2) <= self.SCREEN_WIDTH:
+                    #tekent vierkant op de correcte lijn door de line_idx die de correcte line aangeeft. Deze kan niet groter worden dan self.SCREEN_HEIGHT/cellsize doordat ongebruikte rijen verwijdert worden
+                    screen.blit(surf, ((idx[0]*cellsize - (self.size*cellsize/2 - self.SCREEN_WIDTH/2)), line_idx*cellsize))
 
         #update het hele scherm
         pygame.display.flip()
 
         #zorgt ervoor dat niet getekende (te hoge) rijen uit de lijst verwijdert worden
-        if len(self.stored_states) > self.SCREEN_HEIGHT/self.cellsize:
+        if len(self.stored_states) > self.SCREEN_HEIGHT/cellsize:
                     self.stored_states.pop(0)
         
 
-    def run(self, width: int, height: int, changetime: int, rainbowmode: bool):
+    def run(self, width: int, height: int, changetime: int, cellsize: int, rainbowmode: bool):
         """start pygame visualisatie met bepaalde width en height in pixels, changetime geeft tijd in ms tussen updates en rainbowmode zorgt voor random kleuren"""
         
         #variabelen initialiseren, en pygame configureren
@@ -94,6 +92,8 @@ class Cellular1D(CellularAutomata):
         size = [self.SCREEN_WIDTH,self.SCREEN_HEIGHT]
         self.changetime = changetime #ms
         screen = pygame.display.set_mode(size)
+        surf = pygame.Surface((cellsize, cellsize))
+        surf.fill((255,255,255))
         running = True
 
         #main loop, gebruik pygame.time ipv sleep voor betere event handling
@@ -109,7 +109,7 @@ class Cellular1D(CellularAutomata):
             #huidige tijd wordt vergeleken met de tijd sinds de laatste update
             now = pygame.time.get_ticks()
             if now - last > changetime:
-                self.draw(screen)
+                self.draw(screen, cellsize, surf)
                 self.update()
                 #tijd sinds laatste update wordt bijgewerkt
                 last = pygame.time.get_ticks()
@@ -122,20 +122,20 @@ class Cellular2D(CellularAutomata):
         self.height = height
         
     def draw(self, screen):
-        """tekent het huidige rooster op het scherm"""
+        """tekent het huidige grid op het scherm"""
 
-        self.cellsize = self.SCREEN_WIDTH//self.width
+        cellsize = self.SCREEN_WIDTH//self.width
         screen.fill((0,0,0))
-        surf = pygame.Surface((self.cellsize,self.cellsize))
+        surf = pygame.Surface((cellsize,cellsize))
         if self.rainbowmode:
             surf.fill((rnd.randint(0,255),rnd.randint(0,255),rnd.randint(0,255)))
         else:
             surf.fill((255,255,255))
 
         #ga alle cellen bij langs en teken ze als de staat > 0
-        for idx, cell in np.ndenumerate(self.rooster):
+        for idx, cell in np.ndenumerate(self.grid):
             if cell > 0:
-                screen.blit(surf, (idx[0]*self.cellsize, idx[1]*self.cellsize))
+                screen.blit(surf, (idx[0]*cellsize, idx[1]*cellsize))
 
         #update het hele scherm        
         pygame.display.flip()
@@ -172,16 +172,16 @@ class Cellular2D(CellularAutomata):
                 last = pygame.time.get_ticks()
         
           
-def rule22(cell, idx, rooster):
-    states = get_neighbours1D(rooster, idx[0], 1)
+def rule22(cell, idx, grid):
+    states = get_neighbours1D(grid, idx[0], 1)
     left = states[0]
     center = states[1]
     right = states[2]
     #if idx[0] > 0:
-     #   left = rooster[idx[0]-1,idx[1]] > 0
+     #   left = grid[idx[0]-1,idx[1]] > 0
     #else: left = False
-    #if idx[0] < rooster.shape[0] - 1:
-    #    right = rooster[idx[0]+1,idx[1]] > 0
+    #if idx[0] < grid.shape[0] - 1:
+    #    right = grid[idx[0]+1,idx[1]] > 0
     #else: right = False
     #center = cell > 0
 
@@ -204,12 +204,12 @@ def rule22(cell, idx, rooster):
 
     return cell
 
-def rule54(cell, idx, rooster):
+def rule54(cell, idx, grid):
     if idx[0] > 0:
-        left = rooster[idx[0]-1,idx[1]] > 0
+        left = grid[idx[0]-1,idx[1]] > 0
     else: left = False
-    if idx[0] < rooster.shape[0] - 1:
-        right = rooster[idx[0]+1,idx[1]] > 0
+    if idx[0] < grid.shape[0] - 1:
+        right = grid[idx[0]+1,idx[1]] > 0
     else: right = False
     center = cell > 0
     
@@ -233,6 +233,6 @@ def rule54(cell, idx, rooster):
     return cell
     
 
-game = Cellular1D(64, rule22)
+game = Cellular1D(640, rule22)
 game.start_middle()
-game.run(640,640, 500, False)
+game.run(640,640, 100, 10, True)
