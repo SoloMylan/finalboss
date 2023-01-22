@@ -16,6 +16,13 @@ def get_neighbours1D(grid: np.ndarray, idx: list, reach: int) -> list:
             states.append(0)
     return states
 
+def get_neighbours1D_wraparound(grid: np.ndarray, idx: list, reach: int) -> list:
+    states = []
+    for i in range(idx-reach, idx+reach+1):
+        #voeg waarde van de cell toe, mod grid.size voor de wrap-around (aangepast voor mogelijk negatieve getallen als uitkomst)
+        states.append(grid[(i - int(i/grid.size)*grid.size)])
+    return states
+
 class CellularAutomata():
     
     def __init__(self, shape, rules):
@@ -31,6 +38,16 @@ class CellularAutomata():
             nieuw_grid[idx] = self.rules(cell, idx, self.grid)
         self.grid = nieuw_grid
     
+    def setcells(self, coordinates: list, value: int):
+        """verandert de waarden van cellen met de gegeven coordinaten naar de gegeven waarde"""
+        for idx in coordinates:
+            self.grid[idx] = value
+
+    def setzeros(self):
+        """verandert alle waarden naar 0"""
+        for idx, cell in np.ndenumerate(self.grid):
+            self.grid[idx] = 0
+
     def random(self):
         """vult grid met random 0 of 1"""
         for idx, cell in np.ndenumerate(self.grid):
@@ -39,8 +56,9 @@ class CellularAutomata():
 class Cellular1D(CellularAutomata):
 
     def __init__(self, size: int, rules):
-        super().__init__((size,1), rules)
+        super().__init__((size), rules)
         self.size = size
+        #stored states word gebruikt voor rijen die worden getekend
         self.stored_states = []
 
     def start_middle(self):
@@ -173,7 +191,7 @@ class Cellular2D(CellularAutomata):
         
           
 def rule22(cell, idx, grid):
-    states = get_neighbours1D(grid, idx[0], 1)
+    states = get_neighbours1D_wraparound(grid, idx[0], 1)
     left = states[0]
     center = states[1]
     right = states[2]
@@ -233,6 +251,7 @@ def rule54(cell, idx, grid):
     return cell
     
 
-game = Cellular1D(640, rule22)
-game.start_middle()
-game.run(640,640, 100, 10, True)
+game = Cellular1D([640], rule22)
+game.setcells([(300)], 1)
+
+game.run(640,640, 500, 10, True)
