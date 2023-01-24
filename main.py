@@ -247,7 +247,38 @@ class Cellular2D(CellularAutomata):
                 #tijd sinds laatste update wordt bijgewerkt
                 last = pygame.time.get_ticks()
         
-          
+class GameOfLife(Cellular2D):
+
+    def Game_of_life_rules(cell, idx, grid):
+        states = get_neighbours_wraparound(grid, idx, 1)
+        print(states)
+        levende_buren = 0
+        for i in states: #telt de levende buren 
+                if i == 1:
+                    levende_buren = levende_buren + 1
+        
+                    
+        if cell == 0: #laat er een geboren worden als er precies 3 levende buren zijn
+            if levende_buren == 3: 
+                return 1
+            else:
+                return 0
+        
+            
+        if cell == 1: #laat een levende cel sterven door over- of onderbevolking
+            if levende_buren > 4 or levende_buren < 3: #er is hier rekening gehouden met dat cell ook leeft
+                return 0
+            else:
+                return 1
+
+    def __init__(self, width: int, height: int):
+        super().__init__(width, height, GameOfLife.Game_of_life_rules)
+
+    def glider(self, offset_width, offset_height):
+        self.setcells([(offset_width+1,offset_height),(offset_width+2,offset_height+1),(offset_width+1,offset_height+2),(offset_width,offset_height+2),(offset_width+2,offset_height+2)], 1)
+
+
+
 def rule22(cell, idx, grid):
     states = get_neighbours1D_wraparound(grid, idx[0], 1)
     left = states[0]
@@ -334,10 +365,12 @@ def Game_of_life(cell, idx, grid):
     
     
     
-game = Cellular2D(20, 20, Game_of_life)
+#game = Cellular2D(20, 20, Game_of_life)
+game = GameOfLife(20,20)
 #game = Cellular1D([640], rule22)
 #game.setcells([(300)], )
-game.setcells([(10,10),(11,11),(10,12),(9,12),(11,12)], 1) #glider
+#game.setcells([(10,10),(11,11),(10,12),(9,12),(11,12)], 1) #glider
+game.glider(0,0)
 #game.setcells([(1,1), (1,2), (1,3)], 1)
 print(game.grid)
 
