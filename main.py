@@ -1,7 +1,6 @@
 import numpy as np
 import random as rnd
 import pygame
-import time
 
 #Globale functies
 
@@ -56,8 +55,8 @@ class CellularAutomata():
 class Cellular1D(CellularAutomata):
 
     def __init__(self, size: int, rules):
-        super().__init__((size), rules)
-        self.size = size
+        super().__init__((int(size)), rules)
+        self.size = int(size)
         #stored states word gebruikt voor rijen die worden getekend
         self.stored_states = []
 
