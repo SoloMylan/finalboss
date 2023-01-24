@@ -27,22 +27,23 @@ def get_neighbours2D(grid: np.ndarray, idx: list, reach: int) -> list:
     #thanks steven
     for i in range(idx[0]-reach, idx[0]+reach+1):
         for j in range(idx[1]-reach, idx[1]+reach+1):
-            if i > 0 and j > 0 and i < grid.shape()[0] and j < grid.shape()[1]:
+            if i > 0 and j > 0 and i < grid.shape[0] and j < grid.shape[1]:
+                #print(grid[(i,j)])
                 states.append(grid[(i,j)])
             else:
                 states.append(0)
+    return states
+            
 
 def get_neighbours2D_wraparound(grid: np.ndarray, idx: list, reach: int) -> list:
     states = []
     #thanks steven
     for i in range(idx[0]-reach, idx[0]+reach+1):
         for j in range(idx[1]-reach, idx[1]+reach+1):
-            states.append(grid[(i%grid.shape()[0], j%grid.shape())])
+            states.append(grid[(i%grid.shape[0], j%grid.shape[1])])
+    return states
 
-def get_neighbours(grid: np.ndarray, idx:list, reach: int) -> list:
-    states = []
-    for i in idx:
-        for i in range(i-reach, i+reach+1)
+
 
 
 class CellularAutomata():
@@ -59,6 +60,7 @@ class CellularAutomata():
         for idx, cell in np.ndenumerate(self.grid):
             nieuw_grid[idx] = self.rules(cell, idx, self.grid)
         self.grid = nieuw_grid
+        print(nieuw_grid)
     
     def setcells(self, coordinates: list, value: int):
         """verandert de waarden van cellen met de gegeven coordinaten naar de gegeven waarde"""
@@ -161,10 +163,10 @@ class Cellular2D(CellularAutomata):
         self.width = width
         self.height = height
         
-    def draw(self, screen):
+    def draw(self, screen, cellsize):
         """tekent het huidige grid op het scherm"""
 
-        cellsize = self.SCREEN_WIDTH//self.width
+        
         screen.fill((0,0,0))
         surf = pygame.Surface((cellsize,cellsize))
         if self.rainbowmode:
@@ -180,7 +182,7 @@ class Cellular2D(CellularAutomata):
         #update het hele scherm        
         pygame.display.flip()
     
-    def run(self, width: int, height: int, changetime: int, rainbowmode: bool):
+    def run(self, width: int, height: int, changetime: int, cellsize: int, rainbowmode: bool):
         """start pygame visualisatie met bepaalde width en height in pixels, changetime geeft tijd in ms tussen updates en rainbowmode zorgt voor random kleuren"""
 
         #variabelen initialiseren, en pygame configureren
@@ -206,7 +208,7 @@ class Cellular2D(CellularAutomata):
             #huidige tijd wordt vergeleken met de tijd sinds de laatste update
             now = pygame.time.get_ticks()
             if now - last > changetime:
-                self.draw(screen)
+                self.draw(screen, cellsize)
                 self.update()
                 #tijd sinds laatste update wordt bijgewerkt
                 last = pygame.time.get_ticks()
@@ -271,9 +273,37 @@ def rule54(cell, idx, grid):
         return 0
     
     return cell
+
+def Game_of_life(cell, idx, grid):
+    states = get_neighbours2D(grid, idx, 1)
+    #print(states)
+    levende_buren = 0
+    for i in states: #telt de levende buren 
+            if i == 1:
+                levende_buren = levende_buren + 1
     
+                
+    if cell == 0: #laat er een geboren worden als er precies 3 levende buren zijn
+        if levende_buren == 3: 
+            return 1
+        else:
+            return 0
+    
+        
+    if cell == 1: #laat een levende cel sterven door over of onder bevolking
+        if levende_buren > 4 or levende_buren < 3: #er is hier rekening gehouden met dat cell ook leeft
+            return 0
+        else:
+            return 1
+        
+                    
+    
+    
+    
+game = Cellular2D(50, 50, Game_of_life)
+#game = Cellular1D([640], rule22)
+#game.setcells([(300)], )
+game.setcells([(10,10),(11,11),(10,12),(9,12),(11,12)], 1) #glider
+print(game.grid)
 
-game = Cellular1D([640], rule22)
-game.setcells([(300)], )
-
-game.run(640,640, 500, 10, True)
+game.run(640,640, 100, 10, False)
