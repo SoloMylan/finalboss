@@ -22,6 +22,29 @@ def get_neighbours1D_wraparound(grid: np.ndarray, idx: list, reach: int) -> list
         states.append(grid[(i - int(i/grid.size)*grid.size)])
     return states
 
+def get_neighbours2D(grid: np.ndarray, idx: list, reach: int) -> list:
+    states = []
+    #thanks steven
+    for i in range(idx[0]-reach, idx[0]+reach+1):
+        for j in range(idx[1]-reach, idx[1]+reach+1):
+            if i > 0 and j > 0 and i < grid.shape()[0] and j < grid.shape()[1]:
+                states.append(grid[(i,j)])
+            else:
+                states.append(0)
+
+def get_neighbours2D_wraparound(grid: np.ndarray, idx: list, reach: int) -> list:
+    states = []
+    #thanks steven
+    for i in range(idx[0]-reach, idx[0]+reach+1):
+        for j in range(idx[1]-reach, idx[1]+reach+1):
+            states.append(grid[(i%grid.shape()[0], j%grid.shape())])
+
+def get_neighbours(grid: np.ndarray, idx:list, reach: int) -> list:
+    states = []
+    for i in idx:
+        for i in range(i-reach, i+reach+1)
+
+
 class CellularAutomata():
     
     def __init__(self, shape, rules):
@@ -55,8 +78,8 @@ class CellularAutomata():
 class Cellular1D(CellularAutomata):
 
     def __init__(self, size: int, rules):
-        super().__init__((int(size)), rules)
-        self.size = int(size)
+        super().__init__((size), rules)
+        self.size = size
         #stored states word gebruikt voor rijen die worden getekend
         self.stored_states = []
 
@@ -251,6 +274,6 @@ def rule54(cell, idx, grid):
     
 
 game = Cellular1D([640], rule22)
-game.setcells([(300)], 1)
+game.setcells([(300)], )
 
 game.run(640,640, 500, 10, True)
