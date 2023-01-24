@@ -290,7 +290,7 @@ def Game_of_life(cell, idx, grid):
             return 0
     
         
-    if cell == 1: #laat een levende cel sterven door over of onder bevolking
+    if cell == 1: #laat een levende cel sterven door over- of onderbevolking
         if levende_buren > 4 or levende_buren < 3: #er is hier rekening gehouden met dat cell ook leeft
             return 0
         else:
