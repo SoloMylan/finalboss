@@ -29,12 +29,20 @@ Voor het grootste deel zijn de draw-functies voor 1D en 2D hetzelfde. De complex
 Voor de grafische weergave van de ééndimensionale CA was het nodig om als het waren mee te scrollen met de nieuwe generaties. Deze raakten namelijk na een aantal generaties buiten beeld. Om dit probleem op te lossen, wordt elke nieuwe generatie toegevoegd aan een lijst. Zodra de lijst meer generaties bevat dan grafisch weer te geven zijn op het scherm, word de oudste generaties uit de lijst gehaald en is deze dus ook niet meer te zien.
 
 \subsection{Neighborhood}
-The Neighbourhood (ook "THE NBHD" genoemd) is een Amerikaanse rockband ontstaan in augustus 2011. De band bestaat uit zanger Jesse Rutherford, gitarist Jeremy Freedman en Zach Abels, bassist Mikey Margott en drummer Brandon Fried. Na twee ep's uitgebracht te hebben, brachten ze 23 april 2013 bij Columbia Records hun debuutalbum I Love You uit. Op 16 januari 2014 maakte de band via sociale media bekend dat drummer Bryan Sammis de band ging vertrekken om een solocarrière te beginnen.
+The neighboorhoud functies zijn bedoeld om bij het maken van regels-functies makkelijk toegang te krijgen tot de toestanden van buurtcellen. Er wordt gebruikt gemaakt van een Moore-Neighborhood met een zelf te kiezen afstand, die we $r$ noemen. Ook kan dit voor elk aantal dimensies, die we $d$ noemen (de algemene functie maakt wel gebruik van recursie en is daarom wat minder snel, dus voor 1- en 2-dimensionale CA's kan beter gebruik worden gemaakt van de daarvoor bestemde neighborhood-functies). 
+
+De functies lezen de toestanden van in totaal $r^d$ cellen, en aangezien het lezen in constante tijd kan, is de uiteindelijke complexiteit ook $r^d$.
+
+Voor de periodieke neighborhood-functie wordt nog gebruik gemaakt van modulo-operaties (modulo scherm-hoogte of -breedte), dus bij grote schermgroottes kan dit voor extra complexiteit zorgen doordat de complexiteit van modulo-operaties dan groter wordt. 
+
 \subsection{Overig}
+Als laatste 
 
 \section{handleiding}
 
 \section{Iets van een discussie}
 Iets wat op ons opviel tijdens het afronden van de eendimensionale klasse is dat het “tekenen” van iedere nieuwe rij in de grafische weergaven steeds langzamer verliep naarmate het programma langer had gerund. Na het controleren bleek python ook een onproportioneel groot deel van de processor te gebruiken. Dit is een probleem waar we tegenaan liepen. Het probleem viel ons op toen we de code hadden toegevoegd die er voor zorgt dat wanneer de grote van de CA groter was dan het scherm, de grafische weergave wel in het midden van het scherm begon en dat de CA als het ware buiten het scherm verder loopt. Echter leek dit niet de oorzaak te zijn. 
+
+Verder was een groot deel van onze tijd tijdens werkcolleges gebruikt voor discussies over "Steen", en het label wat hij heeft opgebouwd. Wij hebben dus een erg grote tijdscomplexiteit. 
 
 \end{document}
