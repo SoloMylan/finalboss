@@ -140,7 +140,6 @@ class Cellular1D(CellularAutomata):
         #kies de kleur van surf
         if self.rainbowmode:
             surf.fill((rnd.randint(0,255),rnd.randint(0,255),rnd.randint(0,255)))
-        
 
         #ga alle cellen bij langs en kleur ze in als de staat > 0  
         for line_idx in range(len(self.stored_states)):
@@ -368,7 +367,40 @@ def Game_of_life(cell, idx, grid):
             return 0
         else:
             return 1
-        
+
+def Sickness(cell, idx, grid):
+    states = get_neighbours_wraparound(grid, idx, 1)
+    print(states)
+    levende_buren = 0
+    zieke_buren = 0
+    for i in states: #telt de levende buren 
+        if i == 1:
+            levende_buren = levende_buren + 1
+        if i == 2:
+            zieke_buren = zieke_buren + 1
+
+    if cell == 0:
+        if levende_buren == 3:
+            return 1
+        else:
+            return 0
+
+    if cell == 1:
+        if zieke_buren >= 2:
+            return 2
+        elif levende_buren > 4 or levende_buren < 3: 
+            return 0
+        else:
+            return 1
+
+    if cell >= 2:
+        if levende_buren == 8:
+            return 1
+        else: 
+            return cell+1
+    
+    if cell == 5:
+        return 0
                     
     
     
