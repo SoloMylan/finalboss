@@ -4,79 +4,79 @@ import numpy as np
 import pygame
 
 #Globale functies
-
-def get_neighbours1D(grid: np.ndarray, idx: list, reach: int) -> list:
-    """Geeft een lijst met de staten van horizontale buren met reach voor verschillende 'groottes' van buurten. Bedoeld voor 1D, maar kan ook voor meerdere dimensies gebruikt worden. Dan kijkt het alleen naar buren in 1 dimensie (de 1e)"""
-    states = []
-    for i in range(idx-reach, idx+reach+1):
-        #check dat de index bestaat, anders 0 toevoegen
-        if i > 0 and i < grid.size:
-            states.append(grid[i])
-        else:
-            states.append(0)
-    return states
-
-def get_neighbours1D_wraparound(grid: np.ndarray, idx: list, reach: int) -> list:
-    states = []
-    for i in range(idx-reach, idx+reach+1):
-        #voeg waarde van de cell toe, mod grid.size voor de wrap-around (aangepast voor mogelijk negatieve getallen als uitkomst)
-        states.append(grid[(i - int(i/grid.size)*grid.size)])
-    return states
-
-def get_neighbours2D(grid: np.ndarray, idx: list, reach: int) -> list:
-    states = []
-    #thanks steven
-    for i in range(idx[0]-reach, idx[0]+reach+1):
-        for j in range(idx[1]-reach, idx[1]+reach+1):
-            if i > 0 and j > 0 and i < grid.shape[0] and j < grid.shape[1]:
-                #print(grid[(i,j)])
-                states.append(grid[(i,j)])
+class Neighborhoods:
+    def get_neighbours1D(grid: np.ndarray, idx: list, reach: int) -> list:
+        """Geeft een lijst met de staten van horizontale buren met reach voor verschillende 'groottes' van buurten. Bedoeld voor 1D, maar kan ook voor meerdere dimensies gebruikt worden. Dan kijkt het alleen naar buren in 1 dimensie (de 1e)"""
+        states = []
+        for i in range(idx-reach, idx+reach+1):
+            #check dat de index bestaat, anders 0 toevoegen
+            if i > 0 and i < grid.size:
+                states.append(grid[i])
             else:
                 states.append(0)
-    return states
+        return states
 
-def get_neighbours(grid: np.ndarray, idx: list, reach: int) -> list:
-    """"Geeft een lijst met alle staten van buurtcellen binnen een bereik van reach aantal cellen in elke dimensie. Geeft 0 als indexen buiten het grid vallen"""
-    states = []
-    #maakt gebruik van recursie, elke keer 1 dimensie eraf totdat we bij dimensie 1 uitkomen
+    def get_neighbours1D_wraparound(grid: np.ndarray, idx: list, reach: int) -> list:
+        states = []
+        for i in range(idx-reach, idx+reach+1):
+            #voeg waarde van de cell toe, mod grid.size voor de wrap-around (aangepast voor mogelijk negatieve getallen als uitkomst)
+            states.append(grid[(i - int(i/grid.size)*grid.size)])
+        return states
 
-    #basecase voor dimensie 1
-    if len(idx) == 1:
+    def get_neighbours2D(grid: np.ndarray, idx: list, reach: int) -> list:
+        states = []
+        #thanks steven
         for i in range(idx[0]-reach, idx[0]+reach+1):
-            #checken of indexen binnen grid vallen
-            if i >= 0 and i < grid.shape[0]:
-                states.append(grid[i])
-            else: 
-                states.append(0)
-    else: #dimensie > 1
-        for i in range(idx[0]-reach, idx[0]+reach+1): #we snijden het grid in stukjes met dimensie 1 lager, pakken daar degene bij die in onze neighborhood zitten
-            if i >= 0 and i < grid.shape[0]:
-                states.extend(get_neighbours(grid[i], idx[1:], reach))
-            else: 
-                states.extend(get_neighbours(np.zeros(idx[1:]), idx[1:], reach))
-    return states
+            for j in range(idx[1]-reach, idx[1]+reach+1):
+                if i > 0 and j > 0 and i < grid.shape[0] and j < grid.shape[1]:
+                    #print(grid[(i,j)])
+                    states.append(grid[(i,j)])
+                else:
+                    states.append(0)
+        return states
 
-def get_neighbours_wraparound(grid: np.ndarray, idx: list, reach: int) -> list:
-    """"Geeft een lijst met alle staten van buurtcellen binnen een bereik van reach aantal cellen in elke dimensie. Gaat verder vanaf de andere kant als indexen buiten het grid vallen"""
-    states = []
-    #maakt gebruik van recursie, elke keer 1 dimensie eraf totdat we bij dimensie 1 uitkomen
+    def get_neighbours(grid: np.ndarray, idx: list, reach: int) -> list:
+        """"Geeft een lijst met alle staten van buurtcellen binnen een bereik van reach aantal cellen in elke dimensie. Geeft 0 als indexen buiten het grid vallen"""
+        states = []
+        #maakt gebruik van recursie, elke keer 1 dimensie eraf totdat we bij dimensie 1 uitkomen
 
-    #basecase voor dimensie 1
-    if len(idx) == 1:
+        #basecase voor dimensie 1
+        if len(idx) == 1:
+            for i in range(idx[0]-reach, idx[0]+reach+1):
+                #checken of indexen binnen grid vallen
+                if i >= 0 and i < grid.shape[0]:
+                    states.append(grid[i])
+                else: 
+                    states.append(0)
+        else: #dimensie > 1
+            for i in range(idx[0]-reach, idx[0]+reach+1): #we snijden het grid in stukjes met dimensie 1 lager, pakken daar degene bij die in onze neighborhood zitten
+                if i >= 0 and i < grid.shape[0]:
+                    states.extend(get_neighbours(grid[i], idx[1:], reach))
+                else: 
+                    states.extend(get_neighbours(np.zeros(idx[1:]), idx[1:], reach))
+        return states
+
+    def get_neighbours_wraparound(grid: np.ndarray, idx: list, reach: int) -> list:
+        """"Geeft een lijst met alle staten van buurtcellen binnen een bereik van reach aantal cellen in elke dimensie. Gaat verder vanaf de andere kant als indexen buiten het grid vallen"""
+        states = []
+        #maakt gebruik van recursie, elke keer 1 dimensie eraf totdat we bij dimensie 1 uitkomen
+
+        #basecase voor dimensie 1
+        if len(idx) == 1:
+            for i in range(idx[0]-reach, idx[0]+reach+1):
+                    states.append(grid[i%grid.shape[0]])          
+        else: #dimensie > 1
+            for i in range(idx[0]-reach, idx[0]+reach+1):#we snijden het grid in stukjes met dimensie 1 lager, pakken daar degene bij die in onze neighborhood zitten            
+                states.extend(get_neighbours_wraparound(grid[i%grid.shape[0]], idx[1:], reach))
+        return states            
+
+    def get_neighbours2D_wraparound(grid: np.ndarray, idx: list, reach: int) -> list:
+        states = []
+        #thanks steven
         for i in range(idx[0]-reach, idx[0]+reach+1):
-                states.append(grid[i%grid.shape[0]])          
-    else: #dimensie > 1
-        for i in range(idx[0]-reach, idx[0]+reach+1):#we snijden het grid in stukjes met dimensie 1 lager, pakken daar degene bij die in onze neighborhood zitten            
-            states.extend(get_neighbours_wraparound(grid[i%grid.shape[0]], idx[1:], reach))
-    return states            
-
-def get_neighbours2D_wraparound(grid: np.ndarray, idx: list, reach: int) -> list:
-    states = []
-    #thanks steven
-    for i in range(idx[0]-reach, idx[0]+reach+1):
-        for j in range(idx[1]-reach, idx[1]+reach+1):
-            states.append(grid[(i%grid.shape[0], j%grid.shape[1])])
-    return states
+            for j in range(idx[1]-reach, idx[1]+reach+1):
+                states.append(grid[(i%grid.shape[0], j%grid.shape[1])])
+        return states
 
 
 
@@ -157,7 +157,7 @@ class Cellular1D(CellularAutomata):
                     self.stored_states.pop(0)
         
 
-    def run(self, width: int, height: int, changetime: int, cellsize: int, rainbowmode: bool):
+    def runvisual(self, width: int, height: int, changetime: int, cellsize: int, rainbowmode: bool):
         """start pygame visualisatie met bepaalde width en height in pixels, changetime geeft tijd in ms tussen updates en rainbowmode zorgt voor random kleuren"""
         
         #variabelen initialiseren, en pygame configureren
@@ -216,7 +216,7 @@ class Cellular2D(CellularAutomata):
         #update het hele scherm        
         pygame.display.flip()
     
-    def run(self, width: int, height: int, changetime: int, cellsize: int, rainbowmode: bool):
+    def runvisual(self, width: int, height: int, changetime: int, cellsize: int, rainbowmode: bool):
         """start pygame visualisatie met bepaalde width en height in pixels, changetime geeft tijd in ms tussen updates en rainbowmode zorgt voor random kleuren"""
 
         #variabelen initialiseren, en pygame configureren
@@ -250,7 +250,7 @@ class Cellular2D(CellularAutomata):
 class GameOfLife(Cellular2D):
 
     def Game_of_life_rules(cell, idx, grid):
-        states = get_neighbours_wraparound(grid, idx, 1)
+        states = Neighborhoods.get_neighbours2D_wraparound(grid, idx, 1)
         print(states)
         levende_buren = 0
         for i in states: #telt de levende buren 
@@ -274,8 +274,16 @@ class GameOfLife(Cellular2D):
     def __init__(self, width: int, height: int):
         super().__init__(width, height, GameOfLife.Game_of_life_rules)
 
-    def glider(self, offset_width, offset_height):
-        self.setcells([(offset_width+1,offset_height),(offset_width+2,offset_height+1),(offset_width+1,offset_height+2),(offset_width,offset_height+2),(offset_width+2,offset_height+2)], 1)
+    def glider(self, offset_width, offset_height, direction):
+        """Zet een glider in het grid, met de linkerbovenkant op positie offset_width, offset_height, en direction 0 voor naar linksboven, 1 voor rechtsboven, 2 voor linksonder en 3 voor rechtsonder"""
+        if direction == 0:
+            self.setcells([(offset_width,offset_height), (offset_width+1, offset_height), (offset_width+2, offset_height), (offset_width, offset_height+1), (offset_width+1, offset_height+2)], 1)
+        if direction == 1:
+            self.setcells([(offset_width,offset_height), (offset_width+1, offset_height), (offset_width+2, offset_height), (offset_width+2, offset_height+1), (offset_width+1, offset_height+2)], 1)
+        if direction == 2:
+            self.setcells([(offset_width,offset_height+2), (offset_width+1, offset_height+2), (offset_width+2, offset_height+2), (offset_width, offset_height+1), (offset_width+1, offset_height)], 1)
+        if direction == 3:
+            self.setcells([(offset_width+1,offset_height),(offset_width+2,offset_height+1),(offset_width+1,offset_height+2),(offset_width,offset_height+2),(offset_width+2,offset_height+2)], 1)
 
 
 
@@ -366,12 +374,14 @@ def Game_of_life(cell, idx, grid):
     
     
 #game = Cellular2D(20, 20, Game_of_life)
-game = GameOfLife(20,20)
+game = GameOfLife(20, 20)
 #game = Cellular1D([640], rule22)
 #game.setcells([(300)], )
 #game.setcells([(10,10),(11,11),(10,12),(9,12),(11,12)], 1) #glider
-game.glider(0,0)
+game.glider(10,10, 1)
+#game.setcells([(10,10), (11,10), (11,9), (11,11), (12,10)], 1) #pretty
+#game.setcells([(10,11), (11,11), (11,10), (11,12), (12,10)], 1) #R-Pentomino
 #game.setcells([(1,1), (1,2), (1,3)], 1)
 print(game.grid)
 
-game.run(640,640, 100, 10, False)
+game.runvisual(640,640, 100, 10, False)
