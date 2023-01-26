@@ -1,14 +1,40 @@
 \documentclass{article}
 \usepackage[utf8]{inputenc}
+\usepackage{parskip}
 
 \title{verslag programmeren}
-\author{Isabel Baas, Daan Braakman \& Mylan koobs}
+\author{Isabel Baas, Daan Braakman \& Mylan Koobs}
 \date{January 2023}
 
 \begin{document}
 
 \maketitle
 
+\section{inleiding}
+
+\section{Algoritme}
+
+\subsection{Data-structuur}
+In de code zitten meerdere klassen. De meest algemene klasse, ...., heeft een rooster met een zelf te kiezen aantal cellen in iedere dimensie. De dimensie is ook zelf te kiezen. Voor het rooster is er gebruik gemaakt van numpy arrays. Deze maken het makkelijker om te werken met meerdere dimensies. \newline
+Daarnaast heeft de klasse een regel-functie, die zelf gedefineerd kan worden, bepaald de toestanden van de volgende generaties cellen. \newline Ook bevat de klasse een functie voor het updaten, deze wordt later verder toegelicht.
+
+Er zijn twee klassen afgeleid van de algemene klasse, die voor één- en voor tweedimensionale CA's. Deze bevatten alles van de algemene klasse en dat wat er nodig is om ze grafisch weer te geven. Er is een neighborhood klasse met functies waarmee de staten van omliggende cellen van een cel mee kunnen worden opgehaald. Deze kunnen gebruikt worden bij het defineren van de regel-functies. 
+
+\subsection{Update}
+De update-functie update het gehele rooster door voor elke cel de rules functie op te roepen om te bepalen wat zijn nieuwe staat moet zijn. De complextiteit hangt af van de complextiteit van de regel-functie. Deze noemen we $m$. Bij $n$ cellen wordt de rules-functie $n$ keer aangeroepen, dus dan is de complextiteit $mn$.
+
+\subsection{Grafische weergave}
+Voor het grootste deel zijn de draw-functies voor 1D en 2D hetzelfde. De complextiteit is bijvoorbeeld helemaal gelijk. Deze is compleet afhankelijk van het aantal cellen. Zij dat aantal gelijk aan $n$, dan is de complexiteit dus ook $n$.
+
+Voor de grafische weergave van de ééndimensionale CA was het nodig om als het waren mee te scrollen met de nieuwe generaties. Deze raakten namelijk na een aantal generaties buiten beeld. Om dit probleem op te lossen, wordt elke nieuwe generatie toegevoegd aan een lijst. Zodra de lijst meer generaties bevat dan grafisch weer te geven zijn op het scherm, word de oudste generaties uit de lijst gehaald en is deze dus ook niet meer te zien.
+
+\subsection{Neighborhood}
+The Neighbourhood (ook "THE NBHD" genoemd) is een Amerikaanse rockband ontstaan in augustus 2011. De band bestaat uit zanger Jesse Rutherford, gitarist Jeremy Freedman en Zach Abels, bassist Mikey Margott en drummer Brandon Fried. Na twee ep's uitgebracht te hebben, brachten ze 23 april 2013 bij Columbia Records hun debuutalbum I Love You uit. Op 16 januari 2014 maakte de band via sociale media bekend dat drummer Bryan Sammis de band ging vertrekken om een solocarrière te beginnen.
+\subsection{Overig}
+
+\section{handleiding}
+
 \section{Iets van een discussie}
-Iets wat op ons opviel tijdens het afronden van de eendimensionale klasse is dat het “tekenen” van iedere nieuwe rij in de grafische weergaven steeds langzamer verliep naarmate het programma langer had gerund. Na het controleren bleek python ook een onproportioneel groot deel van de processor te gebruiken. Dit is een probleem waar we tegenaan liepen. Het probleem viel ons op toen we de code hadden toegevoegd die er voor zorgt dat wanneer de grote van de CA groter was dan het scherm, de grafische weergave wel in het midden van het scherm begon en dat de CA als het ware buiten het scherm verder loopt. Echter leek dit niet de oorzaak te zijn.
+Iets wat op ons opviel tijdens het afronden van de eendimensionale klasse is dat het “tekenen” van iedere nieuwe rij in de grafische weergaven steeds langzamer verliep naarmate het programma langer had gerund. Na het controleren bleek python ook een onproportioneel groot deel van de processor te gebruiken. Dit is een probleem waar we tegenaan liepen. Het probleem viel ons op toen we de code hadden toegevoegd die er voor zorgt dat wanneer de grote van de CA groter was dan het scherm, de grafische weergave wel in het midden van het scherm begon en dat de CA als het ware buiten het scherm verder loopt. Echter leek dit niet de oorzaak te zijn. 
+
 \end{document}
