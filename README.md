@@ -75,3 +75,6 @@ Het updaten van CA's kan eenvoudig gedaan worden met de `update` functie. Deze f
 ```python
 myCA.update()
 ```
+
+## Het maken van regels
+
