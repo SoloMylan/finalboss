@@ -3,6 +3,7 @@
 \usepackage{parskip}
 \usepackage[fencedCode]{markdown}
 \usepackage[dutch]{babel}
+\usepackage[a4paper,margin=3cm]{geometry}
 
 \title{verslag programmeren}
 \author{Isabel Baas, Daan Braakman \& Mylan Koobs}
@@ -19,7 +20,8 @@
 
 \section{Algoritme}
 
-\subsection{Data-structuur}
+
+\subsection{Data-structuur} %nog rede voor de keuzes?
 In de code zitten meerdere klassen. De meest algemene klasse, ...., heeft een rooster met een zelf te kiezen aantal cellen in iedere dimensie. De dimensie is ook zelf te kiezen. Voor het rooster is er gebruik gemaakt van numpy arrays. Deze maken het makkelijker om te werken met meerdere dimensies. \newline
 Daarnaast heeft de klasse een regel-functie, die zelf gedefineerd kan worden, bepaald de toestanden van de volgende generaties cellen. \newline Ook bevat de klasse een functie voor het updaten, deze wordt later verder toegelicht.
 
@@ -324,7 +326,17 @@ def Game_of_Life_Sickness(cell, idx, grid):
 `CA.Neighborhoods.get_neighbors_periodiek(grid: np.ndarray, idx: list, reach: int, default: int)`: geeft een list met de toestanden van buurtcellen in een willeukeurig-dimensionale Moore-Neighborhood met reach voor de grootte van de buurt. Gaat verder vanaf de andere kant als cellen niet bestaan.
 \end{markdown}
 
+\newpage
 \section{Iets van een discussie}
+
+\subsection{samenvatting} %beter refereren
+In dit verslag is alles te lezen over de geschreven code. Aller eerst is in de inleiding te lezen waar de code voor is bedoeld en wordt de achtergrond van het onderwerp besproken. \newline
+Er is een algemene klasse ontworpen voor CA's. Daarnaast is er de mogelijkheid om één- en tweedimensionale CA's grafisch weer te geven met een paar sets aan regels, zoals rule22 voor 1D en de regels van Game Of Life voor 2D. Ook is er de mogelijkheid om te kijken naar meer dan 2 toestanden. Naast dode en levende cellen, zijn er dan ook zieke cellen.\newline 
+Hoe de code hiervoor in elkaar steekt is te lezen in de bespreking van het algoritme.\newline
+Ook is er een uitgebreide handleiding voor het gebruik van de code, met voorbeelden.\newline
+Als laaste worden de tekortkomingen van de code bespoken.
+
+\subsection{Tekortkomingen code}
 Iets wat op ons opviel tijdens het afronden van de eendimensionale klasse is dat het “tekenen” van iedere nieuwe rij in de grafische weergaven steeds langzamer verliep naarmate het programma langer had gerund. Na het controleren bleek python ook een onproportioneel groot deel van de processor te gebruiken. Dit is een probleem waar we tegenaan liepen. Het probleem viel ons op toen we de code hadden toegevoegd die er voor zorgt dat wanneer de grote van de CA groter was dan het scherm, de grafische weergave wel in het midden van het scherm begon en dat de CA als het ware buiten het scherm verder loopt. Echter leek dit niet de oorzaak te zijn. \newline
 Een vergelijkbaar probleem kwam omhoog nadat de twee dimensionale klasse af was. Een CA met de regels van Game of life en een rooster grote van bijvoorbeeld 50 bij 50 gaat zo snel als is ingesteld in de \emph{changetime} optie. Maar hoe groter het rooster wordt ingesteld, hoe langzamer de CA gaat. Er is geen directe oorzaak gevonden, niet iets kleins wat opgeglost zou kunnen worden zonder dat een groot deel van de code herschreven zou moeten worden. Aangezien we dit probleem pas laat tegenkwamen is dit ook niet opgelost.
 

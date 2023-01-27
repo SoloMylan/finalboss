@@ -413,7 +413,7 @@ def DaanWithTheSickness(cell, idx, grid):
 #game = Cellular2D(20, 20, Game_of_life)
 #game = GameOfLife(50, 50)
 game = Cellular1D(640, rule22)
-#game.setcells([(320)], 1)
+game.setcells([(320)], 1)
 #game.setcells([(10,10),(11,11),(10,12),(9,12),(11,12)], 1) #glider
 #game.glider(10,10, 1)
 #game.setcells([(10,10), (11,10), (11,9), (11,11), (12,10)], 1) #pretty
@@ -421,6 +421,6 @@ game = Cellular1D(640, rule22)
 #game.setcells([(1,1), (1,2), (1,3)], 1)
 #print(game)
 #game = Cellular2D(50,50, DaanWithTheSickness)
-game.random(1)
+#game.random(1)
 #game.setcells([(10,10),(11,11),(10,12),(9,12),(11,12)], 2)
 game.runvisual(640,640, 100, 10, [(0,0,0), (0,255,255), (150,0,0), (255,0,0)])
