@@ -1,0 +1,2 @@
+#op plaatsen (5,5,5), (0,0,0) & (1,2,3) wordt de waarde van de cell 1.
+myCA.setcells([(5,5,5), (0,0,0), (1,2,3)], 1)

@@ -1,0 +1,2 @@
+#dit kan wederom ook weer met 1-dimensionale CA's
+myCA_2D.runvisual(640,640, 100, 10, [(0,0,0), (255,255,255)])

@@ -1,0 +1,41 @@
+def Game_of_Life_Sickness(cell, idx, grid):
+    states = Neighborhoods.get_neighbors2D_periodiek(grid, idx, 1)
+    levende_buren = 0
+    zieke_buren = 0
+    #telt de levende en zieke buren
+    for i in states:
+        if i == 1:
+            levende_buren = levende_buren + 1
+        if i >= 2:
+            zieke_buren = zieke_buren + 1
+
+    #laat er een geboren worden als er precies 3 levende buren zijn
+    if cell == 0:
+        if levende_buren == 3:
+            return 1
+        else:
+            return 0
+
+
+    if cell == 1:
+        #maakt een cel ziek (toestand 2) als er 3 of meer zieke buurcellen zijn
+        if zieke_buren >= 3:
+            return 2
+        #laat een levende cel sterven door over- of onderbevolking
+        elif levende_buren > 4 or levende_buren < 3:
+            return 0
+        else:
+            return 1
+
+
+    if cell >= 2 and cell < 5:
+        #als een zieke cell meer dan 2 levende buren heeft, geneest de cell
+        if levende_buren > 2:
+            return 1
+        #anders wordt de cell nog zieker
+        else:
+            return cell+1
+
+    #als de cell erg ziek is, gaat hij dood
+    if cell >= 5:
+        return 0

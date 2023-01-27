@@ -1,0 +1,9 @@
+screen = pygame.display.set_mode((640,640))
+wit = pygame.Surface(10,10)
+wit.fill((255,255,255))
+zwart = pygame.Surface(10,10)
+zwart.fill((0,0,0))
+surflist = [zwart, wit]
+
+#Dit kan ook met 1D CA's
+myCA_2D.draw(screen, 10, surflist)
