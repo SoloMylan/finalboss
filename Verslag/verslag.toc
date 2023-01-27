@@ -1,0 +1,20 @@
+\babel@toc {dutch}{}\relax 
+\contentsline {section}{\numberline {1}inleiding}{3}{}%
+\contentsline {section}{\numberline {2}Algoritme}{3}{}%
+\contentsline {subsection}{\numberline {2.1}Data-structuur}{3}{}%
+\contentsline {subsection}{\numberline {2.2}Update}{3}{}%
+\contentsline {subsection}{\numberline {2.3}Grafische weergave}{3}{}%
+\contentsline {subsection}{\numberline {2.4}Neighborhood}{3}{}%
+\contentsline {subsection}{\numberline {2.5}Overig}{4}{}%
+\contentsline {section}{\numberline {3}Handleiding}{4}{}%
+\contentsline {subsection}{\numberline {3.1}Importeren}{4}{}%
+\contentsline {subsection}{\numberline {3.2}Aanmaken van CA's}{4}{}%
+\contentsline {subsubsection}{\numberline {3.2.1}Voorbeeld 1}{4}{}%
+\contentsline {subsubsection}{\numberline {3.2.2}1- en 2-dimensionale CA's}{5}{}%
+\contentsline {subsection}{\numberline {3.3}Het invullen van cellen}{5}{}%
+\contentsline {subsection}{\numberline {3.4}Updaten van CA}{6}{}%
+\contentsline {subsection}{\numberline {3.5}Grafische weergave}{6}{}%
+\contentsline {subsection}{\numberline {3.6}Het maken van regels}{7}{}%
+\contentsline {subsection}{\numberline {3.7}Overzicht van functies}{10}{}%
+\contentsline {section}{\numberline {4}Iets van een discussie}{11}{}%
+\contentsline {subsection}{\numberline {4.1}Taak verdeling \& tijdsmanagement}{12}{}%
