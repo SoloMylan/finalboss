@@ -1,0 +1,2 @@
+#we gebruiken dezelfde functie invert als bij het eerste voorbeeld
+myCA_1D = CA.Cellular1D(10, invert)

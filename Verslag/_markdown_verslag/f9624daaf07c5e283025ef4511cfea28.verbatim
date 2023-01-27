@@ -1,0 +1,7 @@
+def invert(cell, index, grid):
+    if cell == 0:
+        return 1
+    else:
+        return 0
+
+myCA = CA.CellularAutomata([10,10,10], invert)

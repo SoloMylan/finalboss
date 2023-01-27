@@ -1,0 +1,1 @@
+myCA_2D = CA.Cellular2D(10, 5, invert)

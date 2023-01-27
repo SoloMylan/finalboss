@@ -1,0 +1,23 @@
+def Game_of_life_rules(cell, idx, grid):
+        states = CA.Neighborhoods.get_neighbors2D_periodiek(grid, idx, 1)
+        levende_buren = 0
+        #telt de levende buren
+        for i in states:
+                if i == 1:
+                    levende_buren = levende_buren + 1
+
+        #laat er een geboren worden als er precies 3 levende buren zijn
+        if cell == 0:
+            if levende_buren == 3:
+                return 1
+            else:
+                return 0
+
+
+        #laat een levende cel sterven door over- of onderbevolking
+        if cell == 1:
+            #er is hier rekening gehouden met dat cell ook leeft
+            if levende_buren > 4 or levende_buren < 3:
+                return 0
+            else:
+                return 1

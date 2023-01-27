@@ -1,0 +1,30 @@
+import CA
+
+def rule22(cell, idx, grid):
+    #hier halen we de staten van de buurcellen op
+    states = CA.Neighborhoods.get_neighbors1D_periodiek(grid, idx, 1)
+
+    #definieren links, rechts en het midden voor gemak
+    left = states[0]
+    center = states[1]
+    right = states[2]
+
+    #alle voorwaarden met de bijbehorende output
+    # (gebruik makend van dat 0 False geeft bij gebruik als boolean
+    # en getallen ongelijk 0 True)
+    if left and center and right:
+        return 0
+    elif left and center and not right:
+        return 0
+    elif left and not center and right:
+        return 0
+    elif left and not center and not right:
+        return 1
+    elif not left and right and center:
+        return 0
+    elif not left and center and not right:
+        return 1
+    elif not left and not center and right:
+        return 1
+    else:
+        return 0

@@ -1,9 +1,4 @@
-# finalboss
 
-Voor de eindopdracht van programmeren
-
-
-# Handleiding
 
 ## Importeren
 Stop het CA.py bestand in dezelfde map als het project, en importeer het als volgt:
@@ -18,14 +13,14 @@ Zorg er ook voor dat numpy geïnstalleerd is, want dat is wat gebruikt wordt voo
 Verschillende cellulaire automaten kunnen gemaakt worden met behulp van de basisklasse `CellularAutomata`. Een CA kan als volgt gemaakt worden:
 
 `myCA = CA.CellularAutomata(shape, rules)`
- 
-waar shape de vorm van de CA is, wat weergegeven word als een lijst met het aantal cellen in elke dimensie, en rules de functie is die, gegeven een cell, de index van deze cell en de rest van het rooster, de geüpdate staat van deze cell geeft. 
+
+waar shape de vorm van de CA is, wat weergegeven word als een lijst met het aantal cellen in elke dimensie, en rules de functie is die, gegeven een cell, de index van deze cell en de rest van het rooster, de geüpdate staat van deze cell geeft.
 
 ### Voorbeeld 1
 
 We maken hier een 3-dimensionale CA met in elke dimensie 10 cellen, die als regel heeft dat als een cell de waarde 1 heeft, hij 0 wordt en andersom.
 
-We definiëren eerst de functie voor onze regel, en vullen die in wanneer we de CA maken. 
+We definiëren eerst de functie voor onze regel, en vullen die in wanneer we de CA maken.
 ```python
 def invert(cell, index, grid):
     if cell == 0:
@@ -44,22 +39,22 @@ Een 1-dimensionale CA met 10 cellen kan als volgt worden aangemaakt:
 #we gebruiken dezelfde functie invert als bij het eerste voorbeeld
 myCA_1D = CA.Cellular1D(10, invert)
 ```
-Merk op dat hier alleen een getal gegeven wordt voor de grootte, en geen lijst. 
+Merk op dat hier alleen een getal gegeven wordt voor de grootte, en geen lijst.
 
 Een 2-dimensionale CA met 10 cellen in de breedte en 5 in de hoogte kan als volgt worden gemaakt:
 ```python
 myCA_2D = CA.Cellular2D(10, 5, invert)
 ```
-Ook hier wordt de breedte en hoogte los gegeven, en niet in een lijst. 
+Ook hier wordt de breedte en hoogte los gegeven, en niet in een lijst.
 
 ## Het invullen van cellen
 
-Wanneer een CA wordt aangemaakt, begint hij met 0 in elke cell. Er zijn verschillende manieren om waardes aan cellen toe te kennen. 
+Wanneer een CA wordt aangemaakt, begint hij met 0 in elke cell. Er zijn verschillende manieren om waardes aan cellen toe te kennen.
 
-De meest algemene, die voor elke CA werkt, is `setcells`. Deze functie neemt een lijst met index-tuples en een bepaalde waarde, en kent voor elke index-tuple de bijbehorende cell de gegeven waarde toe. 
+De meest algemene, die voor elke CA werkt, is `setcells`. Deze functie neemt een lijst met index-tuples en een bepaalde waarde, en kent voor elke index-tuple de bijbehorende cell de gegeven waarde toe.
 
 ```python
-#op plaatsen (5,5,5), (0,0,0) & (1,2,3) wordt de waarde van de cell 1. 
+#op plaatsen (5,5,5), (0,0,0) & (1,2,3) wordt de waarde van de cell 1.
 myCA.setcells([(5,5,5), (0,0,0), (1,2,3)], 1)
 ```
 
@@ -67,18 +62,18 @@ Ook bestaat er een functie die alle waarden terugzet naar 0, `setzeros`. Deze we
 ```python
 myCA.setzeros()
 ```
-Daarnaast bestaat er ook de functie `random`, die ook voor elke CA werkt, en die alle cellen random 0 of 1 maakt. 
+Daarnaast bestaat er ook de functie `random`, die ook voor elke CA werkt, en die alle cellen random 0 of 1 maakt.
 ```python
 myCA.random()
 ```
-Verder is er ook een functie speciaal voor `Cellular1D`, namelijk `start_middle`, die de cell in het midden naar 1 verandert. 
+Verder is er ook een functie speciaal voor `Cellular1D`, namelijk `start_middle`, die de cell in het midden naar 1 verandert.
 ```python
 myCA_1D.start_middle()
 ```
 
 ## Updaten van CA
 
-Het updaten van CA's kan eenvoudig gedaan worden met de `update` functie. Deze functie roept voor iedere cell de rules-functie op, en geeft de cell de output als waarde. 
+Het updaten van CA's kan eenvoudig gedaan worden met de `update` functie. Deze functie roept voor iedere cell de rules-functie op, en geeft de cell de output als waarde.
 
 ```python
 myCA.update()
@@ -92,9 +87,9 @@ myCA.run(500)
 
 ## Grafische weergave
 
-Voor de 1- en 2-dimensionale CA klassen bestaan er ingebouwde functies voor het visualizeren. 
+Voor de 1- en 2-dimensionale CA klassen bestaan er ingebouwde functies voor het visualizeren.
 
-Allereerst bestaat voor beide de `draw` functie. Deze neemt als argumenten een screen (een pygame Surface), een cellsize voor de grootte van de cellen (in pixels), en een surflist, een lijst van pygame Surfaces. 
+Allereerst bestaat voor beide de `draw` functie. Deze neemt als argumenten een screen (een pygame Surface), een cellsize voor de grootte van de cellen (in pixels), en een surflist, een lijst van pygame Surfaces.
 
 Het `screen` is hetgene waar alles op getekend word, en `surflist` is een lijst met surfaces met verschillende kleuren, die gebruikt worden om alle cellen in te kleuren. Hierbij wordt de toestand van de cell gebruikt als index voor de `surflist`, dus een cell met toestand in wordt ingekleurd met de surface op plek 0 van de lijst, enzovoort. Zorg ervoor dat deze surfaces vierkant zijn met dezelfde cellgroote als de `draw` functie.
 
@@ -110,7 +105,7 @@ surflist = [zwart, wit]
 myCA_2D.draw(screen, 10, surflist)
 ```
 
-Daarnaast bestaan er een functie die het updaten en weergeven automatisch doen, `runvisual`. Deze functie neemt als argumenten de breedte en hoogte van het scherm (in pixels), de `changetime` (tijd tussen updates in millisecondes, vooral nuttig bij CA's die anders te snel gaan), de cellsize in pixels, en een lijst met kleuren voor elke toestand. Als deze lijst kleiner is dan het aantal toestanden, krijgen cellen met een toestand waarvoor geen kleur in de lijst zit de laatste kleur uit de lijst. 
+Daarnaast bestaan er een functie die het updaten en weergeven automatisch doen, `runvisual`. Deze functie neemt als argumenten de breedte en hoogte van het scherm (in pixels), de `changetime` (tijd tussen updates in millisecondes, vooral nuttig bij CA's die anders te snel gaan), de cellsize in pixels, en een lijst met kleuren voor elke toestand. Als deze lijst kleiner is dan het aantal toestanden, krijgen cellen met een toestand waarvoor geen kleur in de lijst zit de laatste kleur uit de lijst.
 
 De visualisatie kan op pauze gezet worden door op de spatiebalk te drukken.
 
@@ -121,15 +116,15 @@ myCA_2D.runvisual(640,640, 100, 10, [(0,0,0), (255,255,255)])
 
 ## Het maken van regels
 
-Voor het maken van regels kan gebruik gemaakt worden van ingebouwde functies die de staten van buurtcellen ophalen. Deze zitten in de `Neighborhoods`-klasse. Er zijn functies voor 1- en 2-dimensionale buurten, en functies voor buurten met willekeurige dimensie. Voor 1- en 2D wordt aangeraden om de daarvoor bestemde functies te gebruiken en niet de algemene, aangezien die meestal iets langzamer is doordat er gebruik gemaakt wordt van recursie. Er bestaan voor elk van die categorieën nog twee soorten functies, waar het verschil zit in de randvoorwaarden. 
+Voor het maken van regels kan gebruik gemaakt worden van ingebouwde functies die de staten van buurtcellen ophalen. Deze zitten in de `Neighborhoods`-klasse. Er zijn functies voor 1- en 2-dimensionale buurten, en functies voor buurten met willekeurige dimensie. Voor 1- en 2D wordt aangeraden om de daarvoor bestemde functies te gebruiken en niet de algemene, aangezien die meestal iets langzamer is doordat er gebruik gemaakt wordt van recursie. Er bestaan voor elk van die categorieën nog twee soorten functies, waar het verschil zit in de randvoorwaarden.
 
-De standaard `Neighborhoods.get_neighbors` functie neemt naast parameters voor het grid, de index van de huidige cell en de reach ook nog een waarde genaamd `default` aan, die gebruikt wordt wanneer een cell buiten het grid ligt (en dus eigenlijk niet bestaat). 
+De standaard `Neighborhoods.get_neighbors` functie neemt naast parameters voor het grid, de index van de huidige cell en de reach ook nog een waarde genaamd `default` aan, die gebruikt wordt wanneer een cell buiten het grid ligt (en dus eigenlijk niet bestaat).
 
 De `Neighborhoods.get_neighbors_periodiek` gaat verder vanaf de andere kant wanneer cellen niet bestaan.
 
 Deze functies geven als output een lijst met de staten van de cellen. De volgorde begint bij de laagste indexen in alle dimensies, beweegt naar de hoogste index in de hoogste dimensie, en beweegt dan 1 omhoog in de één-na-hoogste dimensie en gaat weer naar de hoogste index in de hoogste dimensie, en dit gaat zo door totdat alle cellen zijn opgehaald.
 
-Als voorbeeld maken we hier een functie voor rule 22, één van de elementaire CA's. 
+Als voorbeeld maken we hier een functie voor rule 22, één van de elementaire CA's.
 
 ```python
 import CA
@@ -142,8 +137,8 @@ def rule22(cell, idx, grid):
     left = states[0]
     center = states[1]
     right = states[2]
-    
-    #alle voorwaarden met de bijbehorende output 
+
+    #alle voorwaarden met de bijbehorende output
     # (gebruik makend van dat 0 False geeft bij gebruik als boolean
     # en getallen ongelijk 0 True)
     if left and center and right:
@@ -160,32 +155,32 @@ def rule22(cell, idx, grid):
         return 1
     elif not left and not center and right:
         return 1
-    else: 
+    else:
         return 0
 ```
-Ook kunnen we hiermee vrij eenvoudig een regelfunctie maken voor Game of Life. 
+Ook kunnen we hiermee vrij eenvoudig een regelfunctie maken voor Game of Life.
 
 ```python
 def Game_of_life_rules(cell, idx, grid):
         states = CA.Neighborhoods.get_neighbors2D_periodiek(grid, idx, 1)
         levende_buren = 0
-        #telt de levende buren 
-        for i in states: 
+        #telt de levende buren
+        for i in states:
                 if i == 1:
                     levende_buren = levende_buren + 1
-        
-        #laat er een geboren worden als er precies 3 levende buren zijn          
-        if cell == 0: 
-            if levende_buren == 3: 
+
+        #laat er een geboren worden als er precies 3 levende buren zijn
+        if cell == 0:
+            if levende_buren == 3:
                 return 1
             else:
                 return 0
-        
 
-        #laat een levende cel sterven door over- of onderbevolking   
-        if cell == 1: 
+
+        #laat een levende cel sterven door over- of onderbevolking
+        if cell == 1:
             #er is hier rekening gehouden met dat cell ook leeft
-            if levende_buren > 4 or levende_buren < 3: 
+            if levende_buren > 4 or levende_buren < 3:
                 return 0
             else:
                 return 1
@@ -198,14 +193,14 @@ def Game_of_Life_Sickness(cell, idx, grid):
     states = Neighborhoods.get_neighbors2D_periodiek(grid, idx, 1)
     levende_buren = 0
     zieke_buren = 0
-    #telt de levende en zieke buren 
-    for i in states: 
+    #telt de levende en zieke buren
+    for i in states:
         if i == 1:
             levende_buren = levende_buren + 1
         if i >= 2:
             zieke_buren = zieke_buren + 1
 
-    #laat er een geboren worden als er precies 3 levende buren zijn      
+    #laat er een geboren worden als er precies 3 levende buren zijn
     if cell == 0:
         if levende_buren == 3:
             return 1
@@ -218,7 +213,7 @@ def Game_of_Life_Sickness(cell, idx, grid):
         if zieke_buren >= 3:
             return 2
         #laat een levende cel sterven door over- of onderbevolking
-        elif levende_buren > 4 or levende_buren < 3: 
+        elif levende_buren > 4 or levende_buren < 3:
             return 0
         else:
             return 1
@@ -229,9 +224,9 @@ def Game_of_Life_Sickness(cell, idx, grid):
         if levende_buren > 2:
             return 1
         #anders wordt de cell nog zieker
-        else: 
+        else:
             return cell+1
-    
+
     #als de cell erg ziek is, gaat hij dood
     if cell >= 5:
         return 0
@@ -280,6 +275,3 @@ def Game_of_Life_Sickness(cell, idx, grid):
 `CA.Neighborhoods.get_neighbors(grid: np.ndarray, idx: list, reach: int, default: int)`: geeft een list met de toestanden van buurtcellen in een willeukeurig-dimensionale Moore-Neighborhood met reach voor de grootte van de buurt. Gebruikt default als cellen niet bestaan.
 
 `CA.Neighborhoods.get_neighbors_periodiek(grid: np.ndarray, idx: list, reach: int, default: int)`: geeft een list met de toestanden van buurtcellen in een willeukeurig-dimensionale Moore-Neighborhood met reach voor de grootte van de buurt. Gaat verder vanaf de andere kant als cellen niet bestaan.
-
-
-
