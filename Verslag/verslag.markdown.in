@@ -87,11 +87,11 @@ myCA.run(500)
 
 ## Grafische weergave
 
-Voor de 1- en 2-dimensionale CA klassen bestaan er ingebouwde functies voor het visualizeren.
+Voor de 1- en 2-dimensionale CA klassen bestaan er ingebouwde functies voor het visualiseren.
 
 Allereerst bestaat voor beide de `draw` functie. Deze neemt als argumenten een screen (een pygame Surface), een cellsize voor de grootte van de cellen (in pixels), en een surflist, een lijst van pygame Surfaces.
 
-Het `screen` is hetgene waar alles op getekend word, en `surflist` is een lijst met surfaces met verschillende kleuren, die gebruikt worden om alle cellen in te kleuren. Hierbij wordt de toestand van de cell gebruikt als index voor de `surflist`, dus een cell met toestand in wordt ingekleurd met de surface op plek 0 van de lijst, enzovoort. Zorg ervoor dat deze surfaces vierkant zijn met dezelfde cellgroote als de `draw` functie.
+Het `screen` is hetgeen waar alles op getekend word, en `surflist` is een lijst met surfaces met verschillende kleuren, die gebruikt worden om alle cellen in te kleuren. Hierbij wordt de toestand van de cell gebruikt als index voor de `surflist`, dus een cell met toestand in wordt ingekleurd met de surface op plek 0 van de lijst, enzovoort. Zorg ervoor dat deze surfaces vierkant zijn met dezelfde cellgroote als de `draw` functie.
 
 ```python
 screen = pygame.display.set_mode((640,640))
@@ -238,7 +238,7 @@ def Game_of_Life_Sickness(cell, idx, grid):
 
 `CA.Cellular1D(size: int, rules)`: Maak een 1-dimensionale CA met grootte size en een functie rules met als input een cell, een index en het grid en als output de geupdate staat van de cell.
 
-`CA.Cellular2D(width: int, height: int, rules)`: Maak een 2-dimensionale CA met width cellen in de breedte en heigth cellen in de hoogte en een functie rules met als input een cell, een index en het grid en als output de geupdate staat van de cell.
+`CA.Cellular2D(width: int, height: int, rules)`: Maak een 2-dimensionale CA met width cellen in de breedte en height cellen in de hoogte en een functie rules met als input een cell, een index en het grid en als output de geupdate staat van de cell.
 
 `CA.CellularAutomata.update()`: Update het hele grid door voor elke cel de rules functie op te roepen om te bepalen wat zijn nieuwe staat moet zijn.
 
@@ -272,6 +272,6 @@ def Game_of_Life_Sickness(cell, idx, grid):
 
 `CA.Neighborhoods.get_neighbors_2D_periodiek(grid: np.ndarray, idx: list, reach: int)`: geeft een list met de toestanden van buurtcellen in een 2D Moore-Neighborhood met reach voor de grootte van de buurt. Gaat verder vanaf de andere kant als cellen niet bestaan.
 
-`CA.Neighborhoods.get_neighbors(grid: np.ndarray, idx: list, reach: int, default: int)`: geeft een list met de toestanden van buurtcellen in een willeukeurig-dimensionale Moore-Neighborhood met reach voor de grootte van de buurt. Gebruikt default als cellen niet bestaan.
+`CA.Neighborhoods.get_neighbors(grid: np.ndarray, idx: list, reach: int, default: int)`: geeft een list met de toestanden van buurtcellen in een willekeurig-dimensionale Moore-Neighborhood met reach voor de grootte van de buurt. Gebruikt default als cellen niet bestaan.
 
-`CA.Neighborhoods.get_neighbors_periodiek(grid: np.ndarray, idx: list, reach: int, default: int)`: geeft een list met de toestanden van buurtcellen in een willeukeurig-dimensionale Moore-Neighborhood met reach voor de grootte van de buurt. Gaat verder vanaf de andere kant als cellen niet bestaan.
+`CA.Neighborhoods.get_neighbors_periodiek(grid: np.ndarray, idx: list, reach: int, default: int)`: geeft een list met de toestanden van buurtcellen in een willekeurig-dimensionale Moore-Neighborhood met reach voor de grootte van de buurt. Gaat verder vanaf de andere kant als cellen niet bestaan.
