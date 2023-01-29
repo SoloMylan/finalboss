@@ -1,11 +1,11 @@
-import random as rnd
+import random
 
-import numpy as np
+import numpy
 import pygame
 
-#Globale functies
-class Neighborhoods: #Sweater wather man 
-    def get_neighbors1D(grid: np.ndarray, idx: list, reach: int, default: int) -> list:
+
+class Neighborhoods:  
+    def get_neighbors1D(grid: numpy.ndarray, idx: list, reach: int, default: int) -> list:
         """Geeft een lijst met de staten van horizontale buren met reach voor verschillende 'groottes' van buurten. Bedoeld voor 1D, maar kan ook voor meerdere dimensies gebruikt worden. Dan kijkt het alleen naar buren in 1 dimensie (de 1e)"""
         states = []
         for i in range(idx[0]-reach, idx[0]+reach+1):
@@ -16,14 +16,16 @@ class Neighborhoods: #Sweater wather man
                 states.append(default)
         return states
 
-    def get_neighbors1D_periodiek(grid: np.ndarray, idx: list, reach: int) -> list:
+    def get_neighbors1D_periodiek(grid: numpy.ndarray, idx: list, reach: int) -> list:
+        """geeft een list met de toestanden van buurtcellen in een 1D Moore-Neighborhood met reach voor de grootte van de buurt. Gaat verder vanaf de andere kant als cellen niet bestaan."""
         states = []
         for i in range(idx[0]-reach, idx[0]+reach+1):
             #voeg waarde van de cell toe, mod grid.size voor de wrap-around (aangepast voor mogelijk negatieve getallen als uitkomst)
             states.append(grid[(i - int(i/grid.size)*grid.size)])
         return states
 
-    def get_neighbors2D(grid: np.ndarray, idx: list, reach: int, default: int) -> list:
+    def get_neighbors2D(grid: numpy.ndarray, idx: list, reach: int, default: int) -> list:
+        """geeft een list met de toestanden van buurtcellen in een 2D Moore-Neighborhood met reach voor de grootte van de buurt. Gebruikt default als cellen niet bestaan."""
         states = []
         #thanks steven
         for i in range(idx[0]-reach, idx[0]+reach+1):
@@ -35,7 +37,7 @@ class Neighborhoods: #Sweater wather man
                     states.append(default)
         return states
 
-    def get_neighbors(grid: np.ndarray, idx: list, reach: int, default: int) -> list:
+    def get_neighbors(grid: numpy.ndarray, idx: list, reach: int, default: int) -> list:
         """"Geeft een lijst met alle staten van buurtcellen binnen een bereik van reach aantal cellen in elke dimensie. Geeft 0 als indexen buiten het grid vallen"""
         states = []
         #maakt gebruik van recursie, elke keer 1 dimensie eraf totdat we bij dimensie 1 uitkomen
@@ -51,12 +53,12 @@ class Neighborhoods: #Sweater wather man
         else: #dimensie > 1
             for i in range(idx[0]-reach, idx[0]+reach+1): #we snijden het grid in stukjes met dimensie 1 lager, pakken daar degene bij die in onze neighborhood zitten
                 if i >= 0 and i < grid.shape[0]:
-                    states.extend(get_neighbors(grid[i], idx[1:], reach))
+                    states.extend(Neighborhoods.get_neighbors(grid[i], idx[1:], reach))
                 else: 
-                    states.extend(get_neighbors(np.zeros(idx[1:]), idx[1:], reach))
+                    states.extend(Neighborhoods.get_neighbors(numpy.zeros(idx[1:]), idx[1:], reach))
         return states
 
-    def get_neighbors_periodiek(grid: np.ndarray, idx: list, reach: int) -> list:
+    def get_neighbors_periodiek(grid: numpy.ndarray, idx: list, reach: int) -> list:
         """"Geeft een lijst met alle staten van buurtcellen binnen een bereik van reach aantal cellen in elke dimensie. Gaat verder vanaf de andere kant als indexen buiten het grid vallen"""
         states = []
         #maakt gebruik van recursie, elke keer 1 dimensie eraf totdat we bij dimensie 1 uitkomen
@@ -67,10 +69,11 @@ class Neighborhoods: #Sweater wather man
                     states.append(grid[i%grid.shape[0]])          
         else: #dimensie > 1
             for i in range(idx[0]-reach, idx[0]+reach+1):#we snijden het grid in stukjes met dimensie 1 lager, pakken daar degene bij die in onze neighborhood zitten            
-                states.extend(get_neighbors_wraparound(grid[i%grid.shape[0]], idx[1:], reach))
+                states.extend(Neighborhoods.get_neighbors_wraparound(grid[i%grid.shape[0]], idx[1:], reach))
         return states            
 
-    def get_neighbors2D_periodiek(grid: np.ndarray, idx: list, reach: int) -> list:
+    def get_neighbors2D_periodiek(grid: numpy.ndarray, idx: list, reach: int) -> list:
+        """geeft een list met de toestanden van buurtcellen in een 2D Moore-Neighborhood met reach voor de grootte van de buurt. Gaat verder vanaf de andere kant als cellen niet bestaan."""
         states = []
         #thanks steven
         for i in range(idx[0]-reach, idx[0]+reach+1):
@@ -84,19 +87,20 @@ class Neighborhoods: #Sweater wather man
 class CellularAutomata():
     
     def __init__(self, shape, rules):
-        """Maakt een cellulaire automata aan met de shape voor de vorm van het grid, en een functie rules met als input een cell, een index en het grid en als output de geupdate staat van de cell"""
-        self.grid = np.zeros(shape) #grid begint met allemaal nullen
+        """Maakt een cellulaire automata aan met de shape voor de vorm van het grid, en een functie rules met als inumpyut een cell, een index en het grid en als output de geupdate staat van de cell"""
+        self.grid = numpy.zeros(shape) #grid begint met allemaal nullen
         self.shape = shape
         self.rules = rules
 
     def update(self):
         """update het hele grid door voor elke cel de rules functie op te roepen om te bepalen wat zijn nieuwe staat moet zijn"""
-        nieuw_grid = np.copy(self.grid)
-        for idx, cell in np.ndenumerate(self.grid):
+        nieuw_grid = numpy.copy(self.grid)
+        for idx, cell in numpy.ndenumerate(self.grid):
             nieuw_grid[idx] = self.rules(cell, idx, self.grid)
         self.grid = nieuw_grid
     
     def run(self, updates: int):
+        """Update het grid een gegeven aantal keer."""
         for i in range(updates):
             self.update()
 
@@ -110,13 +114,13 @@ class CellularAutomata():
 
     def setzeros(self):
         """verandert alle waarden naar 0"""
-        for idx, cell in np.ndenumerate(self.grid):
+        for idx, cell in numpy.ndenumerate(self.grid):
             self.grid[idx] = 0
 
     def random(self, max: int):
         """vult grid met random getallen tussen 0 en max"""
-        for idx, cell in np.ndenumerate(self.grid):
-            self.grid[idx] = rnd.randint(0,max)
+        for idx, cell in numpy.ndenumerate(self.grid):
+            self.grid[idx] = random.randint(0,max)
 
 class Cellular1D(CellularAutomata):
 
@@ -128,7 +132,7 @@ class Cellular1D(CellularAutomata):
 
     def start_middle(self):
         """"maakt het middelste element van het grid gelijk aan 1"""
-        self.grid[(self.shape[0])//2] = 1
+        self.grid[(self.shape)//2] = 1
     
     
                 
@@ -145,7 +149,7 @@ class Cellular1D(CellularAutomata):
 
         #ga alle cellen bij langs en kleur ze in als de staat > 0  
         for line_idx in range(len(self.stored_states)):
-            for idx, cell in np.ndenumerate(self.stored_states[line_idx]):
+            for idx, cell in numpy.ndenumerate(self.stored_states[line_idx]):
                 if idx[0]*cellsize - (self.size*cellsize/2 - self.SCREEN_WIDTH/2) >= 0 and idx[0]*cellsize - (self.size*cellsize/2 - self.SCREEN_WIDTH/2) <= self.SCREEN_WIDTH:
                     #tekent vierkant op de correcte lijn door de line_idx die de correcte line aangeeft. Deze kan niet groter worden dan self.SCREEN_HEIGHT/cellsize doordat ongebruikte rijen verwijdert worden
                     screen.blit(surflist[int(cell)], ((idx[0]*cellsize - (self.size*cellsize/2 - self.SCREEN_WIDTH/2)), line_idx*cellsize))
@@ -209,7 +213,7 @@ class Cellular2D(CellularAutomata):
         
 
         #ga alle cellen bij langs en teken ze als de staat > 0
-        for idx, cell in np.ndenumerate(self.grid):
+        for idx, cell in numpy.ndenumerate(self.grid):
             if cell >= len(surflist):
                 screen.blit(surflist[-1], (idx[0]*cellsize, idx[1]*cellsize))
             else:
@@ -297,130 +301,14 @@ class GameOfLife(Cellular2D):
 
 
 
-def rule22(cell, idx, grid):
-    states = Neighborhoods.get_neighbors1D_periodiek(grid, idx, 1)
-    left = states[0]
-    center = states[1]
-    right = states[2]
-    
 
-    if left and center and right:
-        return 0
-    elif left and center and not right:
-        return 0
-    elif left and not center and right:
-        return 0
-    elif left and not center and not right:
-        return 1
-    elif not left and right and center:
-        return 0
-    elif not left and center and not right:
-        return 1
-    elif not left and not center and right:
-        return 1
-    else: 
-        return 0
 
-    return cell
 
-def rule54(cell, idx, grid):
-    if idx[0] > 0:
-        left = grid[idx[0]-1,idx[1]] > 0
-    else: left = False
-    if idx[0] < grid.shape[0] - 1:
-        right = grid[idx[0]+1,idx[1]] > 0
-    else: right = False
-    center = cell > 0
-    
-    if left and center and right:
-        return 0
-    elif left and center:
-        return 0
-    elif left and right:
-        return 1
-    elif left:
-        return 1
-    elif center and right:
-        return 0
-    elif center:
-        return 1
-    elif right:
-        return 1
-    else:
-        return 0
-    
-    return cell
 
-def Game_of_life(cell, idx, grid):
-    states = get_neighbors_wraparound(grid, idx, 1)
-    print(states)
-    levende_buren = 0
-    for i in states: #telt de levende buren 
-            if i == 1:
-                levende_buren = levende_buren + 1
-    
-                
-    if cell == 0: #laat er een geboren worden als er precies 3 levende buren zijn
-        if levende_buren == 3: 
-            return 1
-        else:
-            return 0
-    
-        
-    if cell == 1: #laat een levende cel sterven door over- of onderbevolking
-        if levende_buren > 4 or levende_buren < 3: #er is hier rekening gehouden met dat cell ook leeft
-            return 0
-        else:
-            return 1
 
-def DaanWithTheSickness(cell, idx, grid):
-    states = Neighborhoods.get_neighbors2D_periodiek(grid, idx, 1)
-    print(states)
-    levende_buren = 0
-    zieke_buren = 0
-    for i in states: #telt de levende buren 
-        if i == 1:
-            levende_buren = levende_buren + 1
-        if i >= 2:
-            zieke_buren = zieke_buren + 1
 
-    if cell == 0:
-        if levende_buren == 3:
-            return 1
-        else:
-            return 0
 
-    if cell == 1:
-        if zieke_buren >= 3:
-            return 2
-        elif levende_buren > 4 or levende_buren < 3: 
-            return 0
-        else:
-            return 1
-
-    if cell >= 2 and cell < 5:
-        if levende_buren > 2:
-            return 1
-        else: 
-            return cell+1
-    
-    if cell >= 5:
-        return 0
                     
     
     
     
-#game = Cellular2D(20, 20, Game_of_life)
-#game = GameOfLife(50, 50)
-game = Cellular1D(640, rule22)
-game.setcells([(320)], 1)
-#game.setcells([(10,10),(11,11),(10,12),(9,12),(11,12)], 1) #glider
-#game.glider(10,10, 1)
-#game.setcells([(10,10), (11,10), (11,9), (11,11), (12,10)], 1) #pretty
-#game.setcells([(10,11), (11,11), (11,10), (11,12), (12,10)], 1) #R-Pentomino
-#game.setcells([(1,1), (1,2), (1,3)], 1)
-#print(game)
-#game = Cellular2D(50,50, DaanWithTheSickness)
-#game.random(1)
-#game.setcells([(10,10),(11,11),(10,12),(9,12),(11,12)], 2)
-game.runvisual(640,640, 100, 10, [(0,0,0), (0,255,255), (150,0,0), (255,0,0)])
