@@ -19,7 +19,7 @@
 
 \tableofcontents
 \newpage
-\section{inleiding}
+\section{Inleiding}
 Cellulaire automaten bestaan uit een raster van zogenoemde cellen die allemaal een eindig aantal toestanden aan kunnen nemen. Een aantal voorbeelden van zo'n toestand zouden kunnen zijn: levend, dood, ziek of eenzaam. Een cel neemt een toestand aan op basis van vooraf opgestelde regels en interactie met zijn buurcellen. Deze regels worden dan toegepast op de huidige toestand van deze cel. Op deze manier kan in de verloop van de tijd een systeem worden gesimuleerd waar dan weer vakgerichte conclusies uit getrokken kunnen worden. Cellulaire automata worden niet alleen gebruikt in de wiskunde, maar ook in de biologie bijvoorbeeld. Zo wordt in de biologie cellulaire automata gebruikt om koraalkolonies te simuleren. 
 
 De geschiedenis van cellulaire automata begint rond de jaren 50. De wiskundige John von Neumann wilde namelijk een machine maken die zichzelf na kon bouwen, dit wilde hij bereiken door zelfreproductie uit de natuur na te bootsen. Het eerste cellulaire automaat wat hij heeft gemaakt bevatte 29 verschillende toestanden en veel verschillende regels die verschillende mechanismes konden nabootsen. Dit was het eerste cellulaire automaat dat echt gecreëerd was.
@@ -30,11 +30,11 @@ Het lastige aan deze opdracht is dat er veel verschillende basiszaken zijn die m
 \section{Algoritme}
 
 
-\subsection{Data-structuur} %nog rede voor de keuzes?
+\subsection{Structuur} %nog rede voor de keuzes?
 In de code zitten meerdere klassen. De meest algemene klasse, ...., heeft een rooster met een zelf te kiezen aantal cellen in iedere dimensie. De dimensie is ook zelf te kiezen. Voor het rooster is er gebruik gemaakt van numpy arrays. Deze maken het makkelijker om te werken met meerdere dimensies. \newline
-Daarnaast heeft de klasse een regel-functie, die zelf gedefinieerd kan worden, bepaald de toestanden van de volgende generaties cellen. \newline Ook bevat de klasse een functie voor het updaten, deze wordt later verder toegelicht.
+Daarnaast heeft de klasse een regel-functie, die zelf gedefinieerd kan worden, bepaald de toestanden van de volgende generaties cellen. Het is op deze manier gedaan zodat het eenvoudig is om zelf regels te definiëren. \newline Ook bevat de klasse een functie voor het updaten, deze wordt later verder toegelicht.
 
-Er zijn twee klassen afgeleid van de algemene klasse, die voor één- en voor tweedimensionale CA's. Deze bevatten alles van de algemene klasse en dat wat er nodig is om ze grafisch weer te geven. Er is een neighborhood klasse met functies waarmee de staten van omliggende cellen van een cel mee kunnen worden opgehaald. Deze kunnen gebruikt worden bij het definiëren van de regel-functies. 
+Er zijn twee klassen afgeleid van de algemene klasse, die voor één- en voor tweedimensionale CA's. Deze bevatten alles van de algemene klasse en dat wat er nodig is om ze grafisch weer te geven. Er is een neighborhood klasse met functies waarmee de staten van omliggende cellen van een cel mee kunnen worden opgehaald. Deze kunnen gebruikt worden bij het definiëren van de regel-functies om eenvoudig de staten van buurtcellen op te halen. 
 
 \subsection{Update}
 De update-functie update het gehele rooster door voor elke cel de rules functie op te roepen om te bepalen wat zijn nieuwe staat moet zijn. De complexiteit hangt af van de complexiteit van de regel-functie. Deze noemen we $m$. Bij $n$ cellen wordt de rules-functie $n$ keer aangeroepen, dus dan is de complexiteit $O(mn)$.
