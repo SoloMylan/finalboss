@@ -14,7 +14,7 @@ Verschillende cellulaire automaten kunnen gemaakt worden met behulp van de basis
 
 `myCA = CA.CellularAutomata(shape, rules)`
 
-waar shape de vorm van de CA is, wat weergegeven word als een lijst met het aantal cellen in elke dimensie, en rules de functie is die, gegeven een cell, de index van deze cell en de rest van het rooster, de geüpdate staat van deze cell geeft.
+waar shape de vorm van de CA is, wat weergegeven word als een lijst met het aantal cellen in elke dimensie, en rules de functie is die, gegeven een cell, de index van deze cell en de rest van het rooster, de geüpdatete staat van deze cell geeft.
 
 ### Voorbeeld 1
 
@@ -79,7 +79,7 @@ Het updaten van CA's kan eenvoudig gedaan worden met de `update` functie. Deze f
 myCA.update()
 ```
 
-Ook kan de CA automatisch een gegeven aantal keer geupdate worden door middel van de `run` functie. Deze neemt een getal voor het aantal keer dat de CA geupdate moet worden, en update hem dan zoveel keer.
+Ook kan de CA automatisch een gegeven aantal keer geüpdate worden door middel van de `run` functie. Deze neemt een getal voor het aantal keer dat de CA geüpdate moet worden, en update hem dan zoveel keer.
 
 ```python
 myCA.run(500)
